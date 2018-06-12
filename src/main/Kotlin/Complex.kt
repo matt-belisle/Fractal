@@ -18,14 +18,16 @@ class Complex(real: Double = 0.0, imag: Double = 0.0){
         return Complex(numerator.real / denominator, numerator.imag / denominator)
 
     }
-    fun multByConjugate(): Double {
+    private fun multByConjugate(): Double {
         val real =(this * this.conjugate())
-        if(!real.imag.equals(0.0) ){
+        if(real.imag != 0.0){
             print(real.imag)
             throw(Exception("Multiply by conjugate unsuccessful"))
         }
         return real.real
     }
+
+    fun magnitude(): Double = Math.sqrt(real*real + imag*imag)
 
     override fun equals(other: Any?): Boolean {
         return if(other is Complex){
