@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="1_main" target="1.8" />
       <module name="1_test" target="1.8" />
+      <module name="Fractal_main" target="1.8" />
+      <module name="Fractal_test" target="1.8" />
       <module name="Fractals_main" target="1.8" />
       <module name="Fractals_test" target="1.8" />
     </bytecodeTargetLevel>

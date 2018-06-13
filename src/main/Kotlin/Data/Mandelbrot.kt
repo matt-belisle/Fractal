@@ -1,3 +1,5 @@
+package Data
+
 class Mandelbrot(dimension: Int = 500, bound: Int = 2,
                  maxIterations: Int = 127, startX: Double = -2.0, endX: Double = 2.0, startY: Double = 2.0, endY: Double = -2.0 ){
     private val maxIterations = maxIterations
@@ -7,7 +9,7 @@ class Mandelbrot(dimension: Int = 500, bound: Int = 2,
     //this will be the points the operations done on
     private var points = Array(dimension) { arrayOfNulls<Complex>(dimension) }
     //this will be the actual pixel data to draw
-    var pixels = Array(dimension) { IntArray (dimension, {i -> 0}) }
+    var pixels = Array(dimension) { IntArray (dimension, {0}) }
     init{
         val epsilonX = (Math.abs(startX) + Math.abs(endX))/ dimension
         val epsilonY = (Math.abs(startY) + Math.abs(endY))/ dimension

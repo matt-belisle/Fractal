@@ -1,3 +1,4 @@
+import Data.Mandelbrot
 import org.junit.Assert.*
 import org.junit.Test
 

@@ -1,3 +1,4 @@
+package Data
 class Complex(real: Double = 0.0, imag: Double = 0.0){
     private val real: Double = real
     private val imag = imag
@@ -5,12 +6,12 @@ class Complex(real: Double = 0.0, imag: Double = 0.0){
     fun getReal(): Double = real
     fun getImag(): Double = imag
 
-    operator fun plus(other:Complex): Complex = Complex(real+other.real,imag+other.imag)
-    operator fun minus(other:Complex): Complex = Complex(real-other.real,imag-other.imag)
-    operator fun times(other:Complex): Complex = Complex( (real*other.real-imag*other.imag), (real*other.imag + imag*other.real))
+    operator fun plus(other: Complex): Complex = Complex(real + other.real, imag + other.imag)
+    operator fun minus(other: Complex): Complex = Complex(real - other.real, imag - other.imag)
+    operator fun times(other: Complex): Complex = Complex((real * other.real - imag * other.imag), (real * other.imag + imag * other.real))
     fun conjugate(): Complex = Complex(real, -1 * imag)
     operator fun div(denom: Complex): Complex {
-        if(denom == Complex(0.0,0.0)){
+        if(denom == Complex(0.0, 0.0)){
             throw Exception("Denominator magnitude was zero cannot divide")
         }
         val numerator = this * denom.conjugate()
