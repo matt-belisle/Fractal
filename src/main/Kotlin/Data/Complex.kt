@@ -1,8 +1,7 @@
 package Data
-class Complex(real: Double = 0.0, imag: Double = 0.0){
-    private val real: Double = real
-    private val imag = imag
 
+
+class Complex(private val real: Double = 0.0, private val imag: Double = 0.0){
     fun getReal(): Double = real
     fun getImag(): Double = imag
 

@@ -1,10 +1,8 @@
 package Data
 
-class Mandelbrot(dimension: Int = 500, bound: Int = 2,
-                 maxIterations: Int = 127, startX: Double = -2.0, endX: Double = 2.0, startY: Double = 2.0, endY: Double = -2.0 ){
-    private val maxIterations = maxIterations
-    private val bound = bound
-    private val dimension = dimension
+class Mandelbrot(private val dimension: Int = 500, private val bound: Int = 2,
+                 private val maxIterations: Int = 127, startX: Double = -2.0, endX: Double = 2.0, startY: Double = 2.0, endY: Double = -2.0 ){
+
 
     //this will be the points the operations done on
     private var points = Array(dimension) { arrayOfNulls<Complex>(dimension) }
@@ -32,14 +30,13 @@ class Mandelbrot(dimension: Int = 500, bound: Int = 2,
     private fun getPointValue(point: Complex): Int {
         var tempPoint = point
         var iters = 0
-        while(tempPoint.magnitude() <= 3.0 && iters < maxIterations){
+        while (tempPoint.magnitude() <= 3.0 && iters < maxIterations) {
             tempPoint = tempPoint * tempPoint + point
-            if(tempPoint == point){
+            if (tempPoint == point) {
                 return maxIterations
             }
             iters++
         }
-            return iters
+        return iters
     }
-
 }
