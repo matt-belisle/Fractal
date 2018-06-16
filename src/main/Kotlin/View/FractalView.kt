@@ -2,9 +2,8 @@ package View
 
 import javafx.application.Application
 import javafx.scene.Scene
-import javafx.scene.canvas.Canvas
 import javafx.scene.image.ImageView
-import javafx.scene.layout.Pane
+import javafx.scene.layout.HBox
 import javafx.stage.Stage
 
 class FractalView: Application() {
@@ -15,7 +14,8 @@ class FractalView: Application() {
     val imageView = ImageView(makeFractal.writePixels())
 
     override fun start(primaryStage: Stage) {
-        val scene = Scene(Pane(imageView), width, height)
+        val hbox = HBox(imageView)
+        val scene = Scene(hbox, width, height)
         primaryStage.scene = scene
         primaryStage.title = "Mandelbrot Black and White"
         primaryStage.show()
@@ -24,7 +24,7 @@ class FractalView: Application() {
 
     companion object {
         @JvmStatic fun main(args: Array<String>) {
-            println("Kotlin main is running here!")
+           launch(FractalView::class.java)
         }
     }
 }

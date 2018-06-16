@@ -16,7 +16,7 @@ apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.10
 
 repositories {
     mavenCentral()
