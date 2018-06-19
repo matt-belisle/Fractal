@@ -1,10 +1,10 @@
-package View
+package UI.TornadoFX.Controllers
 
 import Data.Complex
 import Data.Mandelbrot
+import UI.Colors.Color_Tables
 
 import javafx.scene.image.WritableImage
-import javafx.scene.paint.Color
 
 
 class MakeImage(val dimension: Int) {
@@ -31,8 +31,11 @@ class MakeImage(val dimension: Int) {
         zoomFactor = if(zoomIn) {  4.0 } else { 1.0 / 4.0 }
         val origin = Pair(x.toInt() , y.toInt())
         mandelbrot.zoom(zoomFactor, origin = origin)
-
+        writePixels()
     }
-
+    fun changeConstant(c: Complex){
+        mandelbrot = Mandelbrot(dimension, c = c)
+        writePixels()
+    }
 
 }

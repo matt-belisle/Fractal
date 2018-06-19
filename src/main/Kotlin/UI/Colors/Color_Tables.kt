@@ -1,3 +1,5 @@
+package UI.Colors
+
 import javafx.scene.paint.Color
 
 class Color_Tables {
