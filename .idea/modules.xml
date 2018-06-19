@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fractal.iml" filepath="$PROJECT_DIR$/.idea/modules/Fractal.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fractal_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fractal_main.iml" group="Fractal" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fractal_src.iml" filepath="$PROJECT_DIR$/.idea/modules/Fractal_src.iml" group="Fractal" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fractal_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fractal_test.iml" group="Fractal" />
     </modules>
   </component>
