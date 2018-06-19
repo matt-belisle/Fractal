@@ -8,6 +8,7 @@ class Mandelbrot(private val dimension: Int = 500, private val bound: Int = 2,
     private var points = Array(dimension) { arrayOfNulls<Complex>(dimension) }
     //this will be the actual pixel data to draw
     var pixels = Array(dimension) { IntArray(dimension, { 0 }) }
+    var afterIteration = Array(dimension) { arrayOfNulls<Complex>(dimension) }
 
     init {
 
@@ -18,19 +19,21 @@ class Mandelbrot(private val dimension: Int = 500, private val bound: Int = 2,
     fun CreateFractal() {
         points.forEachIndexed { indexRow, arrayOfComplexs ->
             arrayOfComplexs.forEachIndexed { indexColumn, complex ->
-                pixels[indexRow][indexColumn] = getPointValue(complex ?: Complex(0.0, 0.0), maxIterations, c ?: (complex ?: Complex(0.0,0.0)) )
+                pixels[indexRow][indexColumn] = getPointValue(complex ?: Complex(0.0, 0.0), maxIterations, c ?: (complex ?: Complex(0.0,0.0)), indexRow, indexColumn )
             }
         }
     }
 
-    private fun getPointValue(point: Complex, maxIterations: Int, c: Complex): Int {
+    private fun getPointValue(point: Complex, maxIterations: Int, c: Complex, row: Int, col: Int): Int {
         var tempPoint = point
         var iters = 0
         while (tempPoint.magnitude() <= 4.0 && iters < maxIterations) {
             tempPoint = tempPoint * tempPoint + c
             if (tempPoint == point) {
+                afterIteration[row][col] = point
                 return maxIterations
             }
+            afterIteration[row][col] = tempPoint
             iters++
         }
         return iters

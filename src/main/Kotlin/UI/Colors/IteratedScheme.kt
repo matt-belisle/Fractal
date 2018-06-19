@@ -1,10 +1,16 @@
 package UI.Colors
 
+import Data.Complex
 import javafx.scene.paint.Color
 
-class Color_Tables {
+class IteratedScheme: ColorPalette {
+    override fun getColor(i: Int, value: Complex): Color {
+        //will never be null as instantiated in init
+        return colors[i]!!
+    }
+
     companion object {
-        val colors = arrayOfNulls<Color>(513)
+       private val colors = arrayOfNulls<Color>(513)
         init {
             colors.forEachIndexed { index, i -> colors[index] = Color.rgb(index%256,index%32,index%64) }
             colors[512] = Color.WHITE

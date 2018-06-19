@@ -2,6 +2,7 @@ package UI.TornadoFX.Views
 
 import UI.TornadoFX.Controllers.MandelbrotController
 import javafx.scene.control.TextField
+import javafx.scene.input.MouseButton
 import tornadofx.*
 
 
@@ -10,31 +11,40 @@ class FractalView : View("Fractal") {
     var realTextField: TextField by singleAssign()
     var imagTextField: TextField by singleAssign()
     override val root = borderpane {
-        top = vbox {
-            this.hbox {
-                this.vbox {
-                    label("Real").
-                    label("Imag")
-                }
-                this.vbox {
+        top = form {
+
+            fieldset {
+                field("Real") {
                     realTextField = textfield()
+                }
+                field("Imag") {
                     imagTextField = textfield()
                 }
             }
-
-            this.button("Submit") {
-                useMaxWidth = true
-                action { mandelbrotController.changeConstant(
-                        try{ realTextField.text.toDouble() }
-                        catch(e:NumberFormatException) { 0.0 },
-                        try{ imagTextField.text.toDouble() }
-                        catch(e:NumberFormatException){ 0.0 } )
+            button("Submit") {
+                action {
+                    mandelbrotController.changeConstant(
+                            try {
+                                realTextField.text.toDouble()
+                            } catch (e: NumberFormatException) {
+                                0.0
+                            },
+                            try {
+                                imagTextField.text.toDouble()
+                            } catch (e: NumberFormatException) {
+                                0.0
+                            })
+                }
+            }
+            button("Reset To Mandelbrot"){
+                action {
+                    mandelbrotController.toMandelbrot()
                 }
             }
         }
-        center  = imageview(mandelbrotController.image){
+        center = imageview(mandelbrotController.image) {
             setOnMouseClicked {
-                mandelbrotController.zoom(it.sceneX, it.sceneY)
+                mandelbrotController.zoom(it.x, it.y, it.button == MouseButton.PRIMARY)
             }
         }
     }

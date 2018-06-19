@@ -15,8 +15,11 @@ class MandelbrotController(dimension: Int = 1000) : Controller(){
     fun changeConstant(real: Double, imag: Double){
         makeFractal.changeConstant(Complex(real, imag))
     }
+    fun toMandelbrot(){
+        makeFractal.toMandelbrot()
+    }
 
-    fun zoom(x: Double, y: Double){
-        makeFractal.zoom(x,y,zoomIn = true)
+    fun zoom(x: Double, y: Double, zoomIn : Boolean){
+        makeFractal.zoom(x,y,zoomIn)
     }
 }
