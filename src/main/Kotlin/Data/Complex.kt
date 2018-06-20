@@ -40,4 +40,12 @@ class Complex(private val real: Double = 0.0, private val imag: Double = 0.0){
     override fun toString(): String {
         return "$real $imag i"
     }
+
+    fun pow(power: Int): Complex{
+        var temp = Complex(real, imag)
+        for (i in 1  until power) {
+            temp = temp*this
+        }
+        return temp
+    }
 }
