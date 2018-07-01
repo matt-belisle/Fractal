@@ -1,7 +1,7 @@
-package Data.FractalTypes
+package UI.Colors
 
-enum class FractalTypes {
-    MANDELBROT, BURNING_SHIP, JULIA, JULIA_BURNING_SHIP;
+enum class ColorPalettes {
+    BLACK_AND_WHITE, BURNING_SHIP, DISTANCE_ESTIMATION, DOUBLE_LOG, INTERNAL_ANGLE,ITERATED,SMOOTH;
 
     override fun toString(): String = super.toString()
             .replace('_', ' ')

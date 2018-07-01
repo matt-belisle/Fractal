@@ -1,14 +1,8 @@
 package UI.TornadoFX.Controllers
 
-import Data.Complex
-import Data.FractalTypes.BurningShip
-import Data.FractalTypes.Fractal
-import Data.FractalTypes.Julia
-import Data.FractalTypes.Mandelbrot
-import UI.Colors.BlackAndWhiteScheme
-import UI.Colors.BurningShipSmooth
-import UI.Colors.ColorPalette
-import UI.Colors.DoubleLogScheme
+import Data.Distances.GraphObjects.Complex
+import Data.FractalTypes.*
+import UI.Colors.*
 
 import javafx.scene.image.WritableImage
 
@@ -19,17 +13,23 @@ class MakeImage(val dimension: Int) {
     var fractal: Fractal = Mandelbrot(dimension = dimensionOfImage,
             startX = -2.0, endX = 2.0, startY = 2.0, endY = -2.0)
     private val image = WritableImage(dimensionOfImage,dimensionOfImage)
-    public var colorPalette: ColorPalette = BurningShipSmooth(512)
+    var colorPalette: ColorPalette = TwoSchemes(512, InternalAngleScheme(512), DistanceEstimation(512))
 
 
-
-    fun writePixels(): WritableImage{
+//full fractal creation if you need a new type of fractal or want to zoom in/out use this
+    fun createFractal() {
         fractal.createFractal()
+    }
+//just recolor the current fractal allows hot swapping of coloring
+    fun colorFractal(): WritableImage {
         val pixels = fractal.pixels
         val pixelWriter = image.pixelWriter!!
-        pixels.forEachIndexed { indexRow, row -> row.forEachIndexed { indexColumn, color ->
-            pixelWriter.setColor(indexRow, indexColumn, colorPalette.getColor(color, fractal.afterIteration[indexRow][indexColumn] ?: Complex(0.0,0.0)))
-        } }
+        pixels.forEachIndexed { indexRow, row ->
+            row.forEachIndexed { indexColumn, _ ->
+                pixelWriter.setColor(indexRow, indexColumn, colorPalette.getColor(fractal.afterIteration[indexRow][indexColumn]
+                        ?: DataToColour(Complex(0.0, 0.0), 0.0, 0)))
+            }
+        }
         return image
     }
 
@@ -37,19 +37,24 @@ class MakeImage(val dimension: Int) {
         val zoomFactor = if(zoomIn) {  4.0 } else { 0.25 }
         val origin = Pair(x.toInt() , y.toInt())
         fractal.zoom(zoomFactor, origin = origin)
-        writePixels()
+        createFractal()
     }
     fun toJulia(c: Complex, power: Int){
         fractal = Julia(dimension, c = c, power = power)
-        writePixels()
+        createFractal()
     }
     fun toMandelbrot(power: Int){
         fractal = Mandelbrot(dimension,power = power)
-        writePixels()
+        createFractal()
     }
     fun toBurningShip(power: Int){
         fractal = BurningShip(dimension,power = power)
-        writePixels()
+        createFractal()
+    }
+
+    fun toJuliaBS(c: Complex, power: Int) {
+        fractal = JuliaBS(dimension, c = c, power = power)
+        createFractal()
     }
 
 }

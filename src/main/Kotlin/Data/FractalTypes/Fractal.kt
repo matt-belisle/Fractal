@@ -1,12 +1,13 @@
 package Data.FractalTypes
 
-import Data.Complex
+import Data.Distances.GraphObjects.Complex
+import UI.Colors.DataToColour
 
 abstract class Fractal(private val dimension: Int, startX: Double, endX: Double, startY: Double, endY: Double) {
     internal var points = Array(dimension) { arrayOfNulls<Complex>(dimension) }
     //this will be the actual pixel data to draw
     var pixels = Array(dimension) { IntArray(dimension, { 0 }) }
-    var afterIteration = Array(dimension) { arrayOfNulls<Complex>(dimension) }
+    var afterIteration = Array(dimension) { arrayOfNulls<DataToColour>(dimension) }
     private var epsilonX = (Math.abs(startX) + Math.abs(endX)) / dimension
     private var epsilonY = (Math.abs(startY) + Math.abs(endY)) / dimension
 

@@ -1,18 +1,17 @@
 package Data.FractalTypes
 
 import Data.Distances.DistanceToLine
-import Data.Distances.GraphObjects.Complex
-import Data.Distances.DistanceToPoint
 import Data.Distances.DistanceToX
+import Data.Distances.GraphObjects.Complex
 import Data.Distances.GraphObjects.Point
 import UI.Colors.DataToColour
+import kotlin.math.abs
 import kotlin.math.min
 
-class Julia(private val dimension: Int = 500, private val bound: Int = 2,
-            private val maxIterations: Int = 512, startX: Double = -2.0,
-            endX: Double = 2.0, startY: Double = 2.0, endY: Double = -2.0,
-            private val c: Complex, private val power: Int = 1,
-            private val distanceToX: List<DistanceToX> = listOf<DistanceToX>( DistanceToLine(Point(0.0, 1.0),Point(0.0,0.0)), DistanceToLine(Point(0.0,0.0), Point(1.0,0.0)) )) :
+class JuliaBS(private val dimension: Int = 500, private val bound: Int = 2,
+                  private val maxIterations: Int = 512, startX: Double = -2.0,
+                  endX: Double = 2.0, startY: Double = 2.0, endY: Double = -2.0, private val power: Int = 2, private val c: Complex,
+                  private val distanceToX: List<DistanceToX> = listOf<DistanceToX>( DistanceToLine(Point(0.0, 1.0), Point(0.0,0.0)), DistanceToLine(Point(0.0,0.0), Point(1.0,0.0)) )) :
         Fractal(dimension, startX, endX, startY, endY) {
 
     init {
@@ -23,7 +22,7 @@ class Julia(private val dimension: Int = 500, private val bound: Int = 2,
     override fun createFractal() {
         points.forEachIndexed { indexRow, arrayOfComplexs ->
             arrayOfComplexs.forEachIndexed { indexColumn, complex ->
-                pixels[indexRow][indexColumn] = getPointValue(complex ?: Complex(0.0, 0.0),  indexRow, indexColumn )
+                pixels[indexRow][indexColumn] = getPointValue(complex ?: Complex(0.0, 0.0), indexRow, indexColumn)
             }
         }
     }
@@ -33,16 +32,18 @@ class Julia(private val dimension: Int = 500, private val bound: Int = 2,
         var iters = 0
         var distance = 10000.0
         while (tempPoint.magnitude() <= 4.0 && iters < maxIterations) {
-            tempPoint = tempPoint.pow(power) + c
+            tempPoint =  Complex(abs(tempPoint.getReal()), abs(tempPoint.getImag())).pow(power) + c
+
             if (tempPoint == point) {
-                afterIteration[row][col] = DataToColour(point, distance, maxIterations)
+                afterIteration[row][col] = DataToColour(point, 0.0, maxIterations)
                 return maxIterations
             }
             distance  = min(distance ,distanceToX.map{it.distance(tempPoint.toPoint())}.min()!!)
             iters++
         }
-        afterIteration[row][col] = DataToColour(point, distance, iters)
+        afterIteration[row][col] = DataToColour(tempPoint, distance, iters)
         return iters
     }
 
 }
+
