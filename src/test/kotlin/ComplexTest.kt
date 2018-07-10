@@ -1,4 +1,4 @@
-import Data.Distances.GraphObjects.Complex
+import data.distances.GraphObjects.Complex
 import org.junit.Assert.*
 import org.junit.Test
 

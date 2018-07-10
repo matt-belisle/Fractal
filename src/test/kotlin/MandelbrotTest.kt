@@ -1,4 +1,4 @@
-import Data.FractalTypes.Mandelbrot
+import data.fractaltypes.Mandelbrot
 import org.junit.Assert.*
 import org.junit.Test
 
