@@ -42,7 +42,6 @@ class MakeGradient {
             val hue = secondColor.hue * percentage + firstColor.hue * (1 - percentage)
             val sat = secondColor.saturation * percentage + firstColor.saturation * (1 - percentage)
             val bright = secondColor.brightness * percentage + firstColor.brightness * (1 - percentage)
-            println("$hue , $sat , $bright")
             return Color.hsb(hue, sat, bright)
         }
     }

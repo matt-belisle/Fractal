@@ -8,18 +8,21 @@ import javafx.scene.paint.Color
 import tornadofx.*
 import ui.colors.*
 
-class FractalController(private val dimensionOfImage: Int = 1000) : Controller(){
+class FractalController(private val dimension: Int = 1000) : Controller(){
 
-    private var dimension = 2
+
     //default to mandelbrot as initial fractal for app
     var fractal: Fractal = Mandelbrot(dimension = dimension,
             startX = -2.0, endX = 2.0, startY = 2.0, endY = -2.0)
     private var distances: List<DistanceToX> = emptyList()
     private var maxIterations: Int = 512
-    var colorPalette: ColorPalette = TwoSchemes(maxIterations, InternalAngleScheme(maxIterations), DistanceEstimation(maxIterations))
-    private var colors: List<Color> = listOf()
+    private var colors: List<Color> = MakeGradient.makeGradient(maxIterations + 1,listOf(Color.BLACK, Color.WHITE))
+    var colorPalette: ColorPalette = TwoSchemes(maxIterations, InternalAngleScheme(maxIterations), DistanceEstimation(maxIterations, colors))
+    //if second is null then it is a single
+    private var typeOfFractal: Pair<ColorPalettes, ColorPalettes?> = Pair(ColorPalettes.INTERNAL_ANGLE, ColorPalettes.DISTANCE_ESTIMATION)
 
-    var image = WritableImage(dimensionOfImage,dimensionOfImage)
+
+    var image = WritableImage(dimension,dimension)
 
 
     init{
@@ -48,13 +51,14 @@ class FractalController(private val dimensionOfImage: Int = 1000) : Controller()
     }
 
     fun changeColoringScheme(color: ColorPalettes) {
+        typeOfFractal = Pair(color, null)
         runAsync {
-            when (color) {
+            when (typeOfFractal.first) {
                 ColorPalettes.BLACK_AND_WHITE -> colorPalette = BlackAndWhiteScheme(maxIterations)
-                ColorPalettes.SMOOTH -> colorPalette = SmoothScheme(maxIterations)
-                ColorPalettes.BURNING_SHIP -> colorPalette = BurningShipSmooth(maxIterations)
-                ColorPalettes.DISTANCE_ESTIMATION -> colorPalette = DistanceEstimation(maxIterations)
-                ColorPalettes.DOUBLE_LOG -> colorPalette = DoubleLogScheme(maxIterations)
+                ColorPalettes.SMOOTH -> colorPalette = SmoothScheme(maxIterations, colors)
+                ColorPalettes.BURNING_SHIP -> colorPalette = BurningShipSmooth(maxIterations, colors)
+                ColorPalettes.DISTANCE_ESTIMATION -> colorPalette = DistanceEstimation(maxIterations, colors)
+                ColorPalettes.DOUBLE_LOG -> colorPalette = DoubleLogScheme(maxIterations, colors)
                 ColorPalettes.INTERNAL_ANGLE -> colorPalette = InternalAngleScheme(maxIterations)
                 ColorPalettes.ITERATED -> colorPalette = IteratedScheme(colors)
 
@@ -66,22 +70,24 @@ class FractalController(private val dimensionOfImage: Int = 1000) : Controller()
     }
 
     fun twoColoringScheme(innerColor: ColorPalettes, outerColor: ColorPalettes) {
+        typeOfFractal = Pair(innerColor, outerColor)
         runAsync {
-            val innerScheme = when (innerColor) {
+            val innerScheme = when (typeOfFractal.first) {
                 ColorPalettes.BLACK_AND_WHITE -> BlackAndWhiteScheme(maxIterations)
-                ColorPalettes.SMOOTH -> SmoothScheme(maxIterations)
-                ColorPalettes.BURNING_SHIP -> BurningShipSmooth(maxIterations)
-                ColorPalettes.DISTANCE_ESTIMATION -> DistanceEstimation(maxIterations)
-                ColorPalettes.DOUBLE_LOG -> DoubleLogScheme(maxIterations)
+                ColorPalettes.SMOOTH -> SmoothScheme(maxIterations, colors)
+                ColorPalettes.BURNING_SHIP -> BurningShipSmooth(maxIterations, colors)
+                ColorPalettes.DISTANCE_ESTIMATION -> DistanceEstimation(maxIterations, colors)
+                ColorPalettes.DOUBLE_LOG -> DoubleLogScheme(maxIterations, colors)
                 ColorPalettes.INTERNAL_ANGLE -> InternalAngleScheme(maxIterations)
                 ColorPalettes.ITERATED -> IteratedScheme(colors)
             }
-            val outerScheme = when (outerColor) {
+            //second will never be null as function doesnt take nulls and is immediately set to param
+            val outerScheme = when (typeOfFractal.second!!) {
                 ColorPalettes.BLACK_AND_WHITE -> BlackAndWhiteScheme(maxIterations)
-                ColorPalettes.SMOOTH -> SmoothScheme(maxIterations)
-                ColorPalettes.BURNING_SHIP -> BurningShipSmooth(maxIterations)
-                ColorPalettes.DISTANCE_ESTIMATION -> DistanceEstimation(maxIterations)
-                ColorPalettes.DOUBLE_LOG -> DoubleLogScheme(maxIterations)
+                ColorPalettes.SMOOTH -> SmoothScheme(maxIterations, colors)
+                ColorPalettes.BURNING_SHIP -> BurningShipSmooth(maxIterations, colors)
+                ColorPalettes.DISTANCE_ESTIMATION -> DistanceEstimation(maxIterations, colors)
+                ColorPalettes.DOUBLE_LOG -> DoubleLogScheme(maxIterations, colors)
                 ColorPalettes.INTERNAL_ANGLE -> InternalAngleScheme(maxIterations)
                 ColorPalettes.ITERATED -> IteratedScheme(colors)
             }
@@ -102,6 +108,7 @@ class FractalController(private val dimensionOfImage: Int = 1000) : Controller()
             //only need to recreate if the number of colours used has changed
             if(maxIterations != this.maxIterations) {
                 this.maxIterations = maxIterations
+                internalColorPalleteChange()
                 runAsync {
                     fractal.setMaxIterations(maxIterations)
                     colorFractal()
@@ -110,27 +117,36 @@ class FractalController(private val dimensionOfImage: Int = 1000) : Controller()
                 }
                 return
             }
-            changeColoringScheme(color = ColorPalettes.ITERATED)
+            internalColorPalleteChange()
             image = colorFractal()
         }
 
     }
+
+    private fun internalColorPalleteChange() {
+        if (typeOfFractal.second == null) {
+            changeColoringScheme(typeOfFractal.first)
+        } else {
+            twoColoringScheme(typeOfFractal.first, typeOfFractal.second!!)
+        }
+    }
+
     fun setDistances(distances: List<DistanceToX> ) { this.distances = distances }
     
     
     //next is functions for creating and dealing with fractals
 
     //full fractal creation if you need a new type of fractal or want to zoom in/out use this
-    fun createFractal() {
+    private fun createFractal() {
         fractal.createFractal()
     }
     //just recolor the current fractal allows hot swapping of coloring
-    fun colorFractal(): WritableImage {
-        val pixels = fractal.pixels
+    private fun colorFractal(): WritableImage {
+        val pixels = fractal.afterIteration
         val pixelWriter = image.pixelWriter!!
         pixels.forEachIndexed { indexRow, row ->
-            row.forEachIndexed { indexColumn, _ ->
-                pixelWriter.setColor(indexRow, indexColumn, colorPalette.getColor(fractal.afterIteration[indexRow][indexColumn]
+            row.forEachIndexed { indexColumn, data ->
+                pixelWriter.setColor(indexRow, indexColumn, colorPalette.getColor(data
                         ?: DataToColour(Complex(0.0, 0.0), 0.0, 0)))
             }
         }
@@ -152,20 +168,20 @@ class FractalController(private val dimensionOfImage: Int = 1000) : Controller()
             image = it
         }
     }
-    fun toJulia(c: Complex, power: Int){
+    private fun toJulia(c: Complex, power: Int){
         fractal = Julia(dimension, c = c, power = power, distanceToX = distances)
         createFractal()
     }
-    fun toMandelbrot(power: Int){
+    private fun toMandelbrot(power: Int){
         fractal = Mandelbrot(dimension, power = power, distanceToX = distances)
         createFractal()
     }
-    fun toBurningShip(power: Int){
+    private fun toBurningShip(power: Int){
         fractal = BurningShip(dimension, power = power, distanceToX = distances)
         createFractal()
     }
 
-    fun toJuliaBS(c: Complex, power: Int) {
+    private fun toJuliaBS(c: Complex, power: Int) {
         fractal = JuliaBS(dimension, c = c, power = power, distanceToX = distances)
         createFractal()
     }

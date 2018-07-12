@@ -22,12 +22,12 @@ class Mandelbrot(dimension: Int = 500, private val bound: Int = 2,
     override fun createFractal() {
         points.forEachIndexed { indexRow, arrayOfComplexs ->
             arrayOfComplexs.forEachIndexed { indexColumn, complex ->
-                pixels[indexRow][indexColumn] = getPointValue(complex ?: Complex(0.0, 0.0),  indexRow, indexColumn )
+                afterIteration[indexRow][indexColumn] = getPointValue(complex ?: Complex(0.0, 0.0) )
             }
         }
     }
 
-    private fun getPointValue(point: Complex, row: Int, col: Int): Int {
+    private fun getPointValue(point: Complex): DataToColour {
         var tempPoint = point
         var iters = 0
         var distance = 10000.0
@@ -37,13 +37,12 @@ class Mandelbrot(dimension: Int = 500, private val bound: Int = 2,
             distance  = min(distance ,distanceToX.map{it.distance(tempPoint.toPoint())}.min()!!)
 
             if (tempPoint == point) {
-                afterIteration[row][col] = DataToColour(point, distance, maxIterations)
-                return maxIterations
+                return DataToColour(point, distance, maxIterations)
+
             }
             iters++
         }
-        afterIteration[row][col] = DataToColour(tempPoint, distance, iters)
-        return iters
+         return DataToColour(tempPoint, distance, iters)
     }
 
 }

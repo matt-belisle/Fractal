@@ -1,12 +1,12 @@
-package ui.tornadofx.Views
+package ui.tornadofx.views
 
 import data.distances.*
 import data.distances.GraphObjects.Circle
 import data.distances.GraphObjects.Line
 import data.distances.GraphObjects.Point
-import ui.tornadofx.Views.Fragments.CircleForm
-import ui.tornadofx.Views.Fragments.LineForm
-import ui.tornadofx.Views.Fragments.PointForm
+import ui.tornadofx.views.fragments.CircleForm
+import ui.tornadofx.views.fragments.LineForm
+import ui.tornadofx.views.fragments.PointForm
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 

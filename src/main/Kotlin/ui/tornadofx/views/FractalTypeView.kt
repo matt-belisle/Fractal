@@ -1,4 +1,4 @@
-package ui.tornadofx.Views
+package ui.tornadofx.views
 
 import data.fractaltypes.FractalTypes
 import javafx.scene.control.ToggleGroup

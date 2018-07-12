@@ -1,4 +1,4 @@
-package ui.tornadofx.Views
+package ui.tornadofx.views
 
 import data.fractaltypes.FractalTypes
 import ui.tornadofx.controllers.FractalController
@@ -40,6 +40,7 @@ class FractalView : View("Fractal") {
             }
         }
         center = imageview(fractalController.image) {
+            1 + 2
             scaleY = -1.0
             setOnMouseClicked {
                 fractalController.zoom(it.x, it.y, it.button == MouseButton.PRIMARY)

@@ -1,4 +1,4 @@
-package ui.tornadofx.Views.Fragments
+package ui.tornadofx.views.fragments
 
 import ui.colors.ColorPalettes
 import ui.tornadofx.controllers.FractalController

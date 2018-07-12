@@ -1,8 +1,8 @@
-package ui.tornadofx.Views
+package ui.tornadofx.views
 
 import ui.colors.ColorPalettes
 import ui.tornadofx.controllers.FractalController
-import ui.tornadofx.Views.Fragments.TwoSchemesFragment
+import ui.tornadofx.views.fragments.TwoSchemesFragment
 import javafx.scene.control.RadioButton
 import javafx.scene.control.TextField
 import javafx.scene.control.ToggleGroup
@@ -15,7 +15,7 @@ class ColorPaletteView(override val root: VBox = VBox(), private val fractalCont
     private val twoColorsRadio = radiobutton("Two Colouring Schemes", colorPalette)
     private val twoSchemesFragment = TwoSchemesFragment(fractalController = fractalController)
     private var maxIterations: TextField by singleAssign()
-    private var colorList = mutableListOf<Color>().observable()
+    private var colorList = mutableListOf<Color>(Color.BLACK, Color.WHITE).observable()
 
     init {
         with(twoColorsRadio) {

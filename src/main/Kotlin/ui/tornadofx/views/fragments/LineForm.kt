@@ -1,4 +1,4 @@
-package ui.tornadofx.Views.Fragments
+package ui.tornadofx.views.fragments
 
 import data.distances.GraphObjects.Line
 import data.distances.GraphObjects.Point

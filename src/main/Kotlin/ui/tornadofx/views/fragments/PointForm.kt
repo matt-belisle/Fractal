@@ -1,27 +1,22 @@
-package ui.tornadofx.Views.Fragments
+package ui.tornadofx.views.fragments
 
-import data.distances.GraphObjects.Circle
 import data.distances.GraphObjects.Point
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonBar
 import javafx.scene.control.TextField
 import tornadofx.*
 
-class CircleForm(override val root: Form = Form(), list: MutableList<Circle>, private val nextId: Int): Fragment() {
+class PointForm(override val root: Form = Form(), val list: MutableList<Point>, nextID: Int) : Fragment() {
     var ptX: TextField by singleAssign()
     var ptY: TextField by singleAssign()
-    var radius: TextField by singleAssign()
 
     init {
         fieldset {
-            field("Centre-X-Coord") {
+            field("X") {
                 ptX = textfield()
             }
-            field("Centre-Y-Coord") {
+            field("Y") {
                 ptY = textfield()
-            }
-            field("Radius") {
-                radius = textfield()
             }
         }
         button {
@@ -29,8 +24,7 @@ class CircleForm(override val root: Form = Form(), list: MutableList<Circle>, pr
             action {
                 val x: Double? = ptX.text.toDoubleOrNull()
                 val y: Double? = ptY.text.toDoubleOrNull()
-                val radiusD: Double? = radius.text.toDoubleOrNull()
-                if (x == null || y == null || radiusD == null) {
+                if (x == null || y == null) {
                     alert(
                             type = Alert.AlertType.ERROR,
                             header = "Null Data",
@@ -41,7 +35,7 @@ class CircleForm(override val root: Form = Form(), list: MutableList<Circle>, pr
                                 }
                             })
                 } else{
-                    list += Circle(Point(x, y), radiusD, nextId)
+                    list += Point(x, y, nextID)
                     root.removeFromParent()
                 }
             }
