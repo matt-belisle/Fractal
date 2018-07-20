@@ -4,60 +4,65 @@ import data.distances.*
 import data.distances.GraphObjects.Circle
 import data.distances.GraphObjects.Line
 import data.distances.GraphObjects.Point
+import javafx.beans.property.SimpleStringProperty
+import tornadofx.*
 import ui.tornadofx.views.fragments.CircleForm
 import ui.tornadofx.views.fragments.LineForm
 import ui.tornadofx.views.fragments.PointForm
-import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
 
 
+class StringPropertys(string: String){
+    var string by property(string)
+    fun stringProperty() = getProperty(StringPropertys::string)
+}
 class DistanceTableListView : View() {
-    val points = mutableListOf<Point>().observable()
+
+    private val points = mutableListOf<Point>().observable()
     private val selectedObject = SimpleStringProperty()
-    private val lines = mutableListOf<Line>(Line(Pair(Point(1.0, 0.0), Point(1.0, 1.0)))).observable()
+    private val lines = mutableListOf<Line>().observable()
     private val circles = mutableListOf<Circle>().observable()
     private val objects = listOf("Point", "Line", "Circle").observable()
-    private val tableViewPoints = tableview(points) {
-        column("id", Point::idProperty)
-        column("x", Point::xProperty)
-        column("y", Point::yProperty)
-        contextmenu {
-            item("Delete").action {
-                points.remove(selectedItem)
-                removeID(selectedItem?.id ?: 1000)
-            }
-        }
-    }
-    private val tableViewLines = tableview(lines) {
-        column("id", Line::idProperty)
-        column("Point 1", Line::point1Property)
-        column("Point 2", Line::point2Property)
-        contextmenu {
-            item("Delete").action {
-                if(selectedItem != null) {
-                    lines.remove(selectedItem)
-                    removeID(selectedItem?.id ?: 1000)
-                }
-            }
-        }
-    }
-    private val tableViewCircles = tableview(circles) {
-        column("id", Circle::idProperty)
-        column("Centre Point", Circle::centreProperty)
-        column("Radius", Circle::radiusProperty)
-        contextmenu {
-            item("Delete").action {
-                if(selectedItem != null) {
-                    circles.remove(selectedItem)
-                    removeID(selectedItem?.id ?: 1000)
-                }
-            }
-        }
-    }
+    private val strings = listOf(StringPropertys("Points"), StringPropertys("Lines"), StringPropertys("Circles")).observable()
+
+
     override val root = vbox {
-        this += tableViewPoints
-        this += tableViewLines
-        this += tableViewCircles
+        tableview(strings){
+            column("Type", StringPropertys::stringProperty)
+            rowExpander (expandOnDoubleClick = true){
+                if(it.string == "Points"){
+                    listview(points){
+                        contextmenu {
+                            item("Delete").action {
+                                if(selectedItem != null) {
+                                    points.remove(selectedItem)
+                                }
+                            }
+                        }
+                    }
+                }else if(it.string == "Lines"){
+                    listview(lines){
+                        contextmenu {
+                            item("Delete").action {
+                                if(selectedItem != null) {
+                                    lines.remove(selectedItem)
+                                }
+                            }
+                        }
+                    }
+                }else if(it.string == "Circles"){
+                    listview (circles){
+                        contextmenu {
+                            item("Delete").action {
+                                if(selectedItem != null) {
+                                    circles.remove(selectedItem)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            smartResize()
+        }
         this += hbox {
             this += combobox(selectedObject, objects) { selectionModel.selectFirst() }
             this += button("+") {
@@ -65,13 +70,13 @@ class DistanceTableListView : View() {
                     val typeOfObject = DistanceObjects.valueOf(selectedObject.get().toUpperCase())
                     if (typeOfObject == DistanceObjects.POINT) {
 
-                        openInternalWindow(PointForm(list = points, nextID = nextId()))
+                        openInternalWindow(PointForm(list = points))
                     }
                     else if (typeOfObject == DistanceObjects.LINE){
-                        openInternalWindow(LineForm(list = lines, nextID = nextId()))
+                        openInternalWindow(LineForm(list = lines))
                     }
                     else if(typeOfObject == DistanceObjects.CIRCLE){
-                        openInternalWindow(CircleForm(list = circles, nextId = nextId()))
+                        openInternalWindow(CircleForm(list = circles))
                     }
                 }
             }
@@ -86,10 +91,6 @@ class DistanceTableListView : View() {
         lines.forEach{distances.add(DistanceToLine(it))}
         circles.forEach{distances.add(DistanceToCircle(it))}
         return distances.toList()
-    }
-    fun removeID(id: Int){
-        points.filter { it.id > id }.map { it.id-=1 }
-        lines.filter { it.id > id }.map { it.id-=1 }
     }
 }
 

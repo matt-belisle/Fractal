@@ -7,10 +7,10 @@ import javafx.scene.control.ButtonBar
 import javafx.scene.control.TextField
 import tornadofx.*
 
-class CircleForm(override val root: Form = Form(), list: MutableList<Circle>, private val nextId: Int): Fragment() {
-    var ptX: TextField by singleAssign()
-    var ptY: TextField by singleAssign()
-    var radius: TextField by singleAssign()
+class CircleForm(override val root: Form = Form(), list: MutableList<Circle>): Fragment() {
+    private var ptX: TextField by singleAssign()
+    private var ptY: TextField by singleAssign()
+    private var radius: TextField by singleAssign()
 
     init {
         fieldset {
@@ -41,7 +41,7 @@ class CircleForm(override val root: Form = Form(), list: MutableList<Circle>, pr
                                 }
                             })
                 } else{
-                    list += Circle(Point(x, y), radiusD, nextId)
+                    list += Circle(Point(x, y), radiusD)
                     root.removeFromParent()
                 }
             }

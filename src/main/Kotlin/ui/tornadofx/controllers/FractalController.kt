@@ -3,10 +3,15 @@ package ui.tornadofx.controllers
 import data.distances.DistanceToX
 import data.distances.GraphObjects.Complex
 import data.fractaltypes.*
+import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
 import tornadofx.*
 import ui.colors.*
+import java.awt.image.RenderedImage
+import java.io.File
+import java.util.*
+import javax.imageio.ImageIO
 
 class FractalController(private val dimension: Int = 1000) : Controller(){
 
@@ -184,6 +189,13 @@ class FractalController(private val dimension: Int = 1000) : Controller(){
     private fun toJuliaBS(c: Complex, power: Int) {
         fractal = JuliaBS(dimension, c = c, power = power, distanceToX = distances)
         createFractal()
+    }
+
+    fun save(directory: File) {
+        val nameOfFile  = UUID.randomUUID()
+        val file = File("${directory.absolutePath}/${nameOfFile.toString()}.png")
+        val renderedFractal: RenderedImage = SwingFXUtils.fromFXImage(image,null)
+        ImageIO.write(renderedFractal, "png", file)
     }
 
 }

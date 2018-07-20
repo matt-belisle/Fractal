@@ -5,7 +5,9 @@ import ui.tornadofx.controllers.FractalController
 import javafx.scene.control.RadioButton
 import javafx.scene.control.TextField
 import javafx.scene.input.MouseButton
+import javafx.stage.FileChooser
 import tornadofx.*
+import java.io.File
 
 
 class FractalView : View("Fractal") {
@@ -34,9 +36,20 @@ class FractalView : View("Fractal") {
             }
             button("Submit") {
                 action {
+                    text = "loading"
                     submitFractal()
+                    text = "Submit"
                 }
                 shortcut("Enter")
+            }
+            button("Save") {
+                action {
+                    val directory: File? = chooseDirectory(title = "Choose Directory", initialDirectory = File(System.getProperty("user.home")))
+                    if(directory != null){
+                        fractalController.save(directory)
+                    }
+                }
+                shortcut("Ctrl+S")
             }
         }
         center = imageview(fractalController.image) {
@@ -80,3 +93,5 @@ class FractalView : View("Fractal") {
 
 
 }
+
+

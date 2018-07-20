@@ -8,11 +8,11 @@ import javafx.scene.control.TextField
 import tornadofx.*
 
 
-class LineForm(override val root: Form = Form(), val list: MutableList<Line>, nextID: Int) : Fragment() {
-    var pt1X: TextField by singleAssign()
-    var pt1Y: TextField by singleAssign()
-    var pt2X: TextField by singleAssign()
-    var pt2Y: TextField by singleAssign()
+class LineForm(override val root: Form = Form(), val list: MutableList<Line>) : Fragment() {
+    private var pt1X: TextField by singleAssign()
+    private var pt1Y: TextField by singleAssign()
+    private var pt2X: TextField by singleAssign()
+    private var pt2Y: TextField by singleAssign()
 
     init {
         fieldset {
@@ -47,7 +47,7 @@ class LineForm(override val root: Form = Form(), val list: MutableList<Line>, ne
                                 }
                             })
                 } else{
-                    list += Line(Pair(Point(x1, y1), Point(x2, y2)), nextID)
+                    list += Line(Pair(Point(x1, y1), Point(x2, y2)))
                     root.removeFromParent()
                 }
             }

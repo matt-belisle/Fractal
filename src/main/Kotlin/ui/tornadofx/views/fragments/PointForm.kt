@@ -6,9 +6,9 @@ import javafx.scene.control.ButtonBar
 import javafx.scene.control.TextField
 import tornadofx.*
 
-class PointForm(override val root: Form = Form(), val list: MutableList<Point>, nextID: Int) : Fragment() {
-    var ptX: TextField by singleAssign()
-    var ptY: TextField by singleAssign()
+class PointForm(override val root: Form = Form(), val list: MutableList<Point>) : Fragment() {
+    private var ptX: TextField by singleAssign()
+    private var ptY: TextField by singleAssign()
 
     init {
         fieldset {
@@ -35,7 +35,7 @@ class PointForm(override val root: Form = Form(), val list: MutableList<Point>, 
                                 }
                             })
                 } else{
-                    list += Point(x, y, nextID)
+                    list += Point(x, y)
                     root.removeFromParent()
                 }
             }

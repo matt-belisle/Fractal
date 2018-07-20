@@ -6,6 +6,7 @@ import ui.tornadofx.views.fragments.TwoSchemesFragment
 import javafx.scene.control.RadioButton
 import javafx.scene.control.TextField
 import javafx.scene.control.ToggleGroup
+import javafx.scene.input.Dragboard
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -52,9 +53,9 @@ class ColorPaletteView(override val root: VBox = VBox(), private val fractalCont
                     }
                     disableProperty().bind(twoColorsRadio.selectedProperty())
                 }
-                colorpicker(mode = ColorPickerMode.MenuButton){
+                colorpicker(mode = ColorPickerMode.MenuButton) {
                     valueProperty().onChange {
-                        if(it != null) {
+                        if (it != null) {
                             colorList.add(it)
                         }
                     }
@@ -64,19 +65,26 @@ class ColorPaletteView(override val root: VBox = VBox(), private val fractalCont
                         maxIterations = textfield()
                     }
                 }
-                button("Change Color Palette"){
+                button("Change Color Palette") {
                     action {
                         val maxIterations = maxIterations.text.toIntOrNull() ?: 512
-                        fractalController.changeColoringPalette( maxIterations, colorList)
+                        fractalController.changeColoringPalette(maxIterations, colorList)
                     }
                 }
-               listview(colorList){
-                   cellFormat {
-                       text = it.toString()
-                       style { baseColor = it } }
-               }
+                listview(colorList) {
+                    cellFormat {
+                        text = it.toString()
+                        style { baseColor = it }
+                    }
+                    contextmenu {
+                        item("Delete").action {
+                            if (selectedItem != null) {
+                                colorList.remove(selectedItem)
+                            }
+                        }
+                    }
+                }
             }
-
         }
     }
 }
