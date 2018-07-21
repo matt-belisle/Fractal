@@ -1,14 +1,6 @@
 package data.distances.GraphObjects
 
-import tornadofx.*
-
-class Circle(centre: Point, radius: Double){
-    var radius by property(radius)
-    fun radiusProperty() = getProperty(Circle::radius)
-
-    var centre by property(centre)
-    fun centreProperty() = getProperty(Circle::centre)
-
+data class Circle(val centre: Point,val radius: Double){
     override fun toString(): String {
         return "Radius: $radius, Centre Point: $centre"
     }

@@ -1,16 +1,16 @@
 package data.distances.GraphObjects
 
-import tornadofx.*
 
-
-class Point(x: Double, y: Double){
-    var x by property(x)
-    fun xProperty() = getProperty(Point::x)
-
-    var y by property(y)
-    fun yProperty() = getProperty(Point::y)
+data class Point(val x: Double, val y: Double){
 
     override fun toString(): String {
         return "($x , $y)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Point){
+            return other.x == x && other.y == y
+        }
+        return false
     }
 }

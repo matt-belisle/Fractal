@@ -83,8 +83,6 @@ class DistanceTableListView : View() {
         }
     }
 
-    private fun nextId() = points.size + lines.size + circles.size
-
     fun getVals(): List<DistanceToX> {
         val distances = mutableListOf<DistanceToX>()
         points.forEach{distances.add(DistanceToPoint(it))}

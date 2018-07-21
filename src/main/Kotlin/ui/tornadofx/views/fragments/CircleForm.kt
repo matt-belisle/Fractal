@@ -5,9 +5,10 @@ import data.distances.GraphObjects.Point
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonBar
 import javafx.scene.control.TextField
+import javafx.scene.layout.StackPane
 import tornadofx.*
 
-class CircleForm(override val root: Form = Form(), list: MutableList<Circle>): Fragment() {
+class CircleForm(override val root: Form = Form(), list: MutableList<Circle>, window: InternalWindow? = null): Fragment() {
     private var ptX: TextField by singleAssign()
     private var ptY: TextField by singleAssign()
     private var radius: TextField by singleAssign()
@@ -42,6 +43,8 @@ class CircleForm(override val root: Form = Form(), list: MutableList<Circle>): F
                             })
                 } else{
                     list += Circle(Point(x, y), radiusD)
+                    findParentOfType(InternalWindow::class)?.close()
+                    //that is basically a return but if that doesnt work then just remove from parent
                     root.removeFromParent()
                 }
             }

@@ -8,7 +8,7 @@ import kotlin.math.sqrt
 class DistanceToLine(line: Line): DistanceToX {
     private val pt1 = line.point1
     private val pt2 = line.point2
-    private var isPoint: Boolean = pt1 == pt2
+    private val isPoint: Boolean = pt1 == pt2
     private val a: Double
     private val b: Double
     private val c: Double

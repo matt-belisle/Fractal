@@ -48,6 +48,8 @@ class LineForm(override val root: Form = Form(), val list: MutableList<Line>) : 
                             })
                 } else{
                     list += Line(Pair(Point(x1, y1), Point(x2, y2)))
+                    findParentOfType(InternalWindow::class)?.close()
+                    //that is basically a return but if that doesnt work then just remove from parent
                     root.removeFromParent()
                 }
             }

@@ -36,6 +36,8 @@ class PointForm(override val root: Form = Form(), val list: MutableList<Point>) 
                             })
                 } else{
                     list += Point(x, y)
+                    findParentOfType(InternalWindow::class)?.close()
+                    //that is basically a return but if that doesnt work then just remove from parent
                     root.removeFromParent()
                 }
             }
